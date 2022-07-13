@@ -12,6 +12,9 @@ services:
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: keycloak
       KC_HOSTNAME: sso.app.danielr1996.de
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+      KC_PROXY: edge
     labels:
       traefik.enable: true
       traefik.http.routers.keycloak.rule: Host(`sso.app.danielr1996.de`)
