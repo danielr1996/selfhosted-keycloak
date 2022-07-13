@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  keycloak:
+    restart: unless-stopped
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: postgres
+      DB_DATABASE: keycloak
+      DB_ADDR: keycloak-db
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      PROXY_ADDRESS_FORWARDING: true
+      KEYCLOAK_HOSTNAME: sso.app.danielr1996.de
+    deploy:
+      labels:
+        traefik.enable: true
+        traefik.http.routers.keycloak.rule: Host(`sso.app.danielr1996.de`)
+        traefik.http.routers.keycloak.tls.certresolver: letsencrypt
+        de.danielr1996.bashdoard.name: Keycloak
+        de.danielr1996.bashdoard.url: https://sso.app.danielr1996.de
+        de.danielr1996.bashdoard.icon: /resources/f5np5/welcome/keycloak/img/favicon.ico
+        de.danielr1996.bashdoard.id: keycloak
+  keycloak-db:
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    image: postgres:latest
+    volumes:
+      - data:/var/lib/postgresql/data
+volumes:
+  data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.0.0.5,nolock,soft,rw"
+      device: ":/mnt/user/compose-data/keycloak/db"
