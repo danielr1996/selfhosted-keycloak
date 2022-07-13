@@ -2,27 +2,26 @@ version: '3'
 
 services:
   keycloak:
-    restart: unless-stopped
     image: quay.io/keycloak/keycloak:latest
+    command: |
+      start
+      --auto-build
+      --db=postgres
+      --features=token-exchange
+      --db-url=jdbc:postgresql://keycloak-db:5432/keycloak
+      --db-username=keycloak
+      --db-password=keycloak
     environment:
-      DB_VENDOR: postgres
-      DB_DATABASE: keycloak
-      DB_ADDR: keycloak-db
-      DB_USER: keycloak
-      DB_PASSWORD: keycloak
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      PROXY_ADDRESS_FORWARDING: true
-      KEYCLOAK_HOSTNAME: sso.app.danielr1996.de
-    deploy:
-      labels:
-        traefik.enable: true
-        traefik.http.routers.keycloak.rule: Host(`sso.app.danielr1996.de`)
-        traefik.http.routers.keycloak.tls.certresolver: letsencrypt
-        de.danielr1996.bashdoard.name: Keycloak
-        de.danielr1996.bashdoard.url: https://sso.app.danielr1996.de
-        de.danielr1996.bashdoard.icon: /resources/f5np5/welcome/keycloak/img/favicon.ico
-        de.danielr1996.bashdoard.id: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    labels:
+      traefik.enable: true
+      traefik.http.routers.keycloak.rule: Host(`sso.app.danielr1996.de`)
+      traefik.http.routers.keycloak.tls.certresolver: letsencrypt
+      de.danielr1996.bashdoard.name: Keycloak
+      de.danielr1996.bashdoard.url: https://sso.app.danielr1996.de
+      de.danielr1996.bashdoard.icon: /resources/f5np5/welcome/keycloak/img/favicon.ico
+      de.danielr1996.bashdoard.id: keycloak
   keycloak-db:
     restart: unless-stopped
     environment:
