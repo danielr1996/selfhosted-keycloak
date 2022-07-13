@@ -3,17 +3,15 @@ version: '3'
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    command: |
-      start
-      --auto-build
-      --db=postgres
-      --features=token-exchange
-      --db-url=jdbc:postgresql://keycloak-db:5432/keycloak
-      --db-username=keycloak
-      --db-password=keycloak
+    command: start
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME: sso.app.danielr1996.de
     labels:
       traefik.enable: true
       traefik.http.routers.keycloak.rule: Host(`sso.app.danielr1996.de`)
