@@ -2,15 +2,12 @@ version: '3'
 
 services:
   keycloak:
+    restart: unless-stopped
     image: quay.io/keycloak/keycloak:latest
-    command: start
+    command: start --auto-build --db=postgres --features=token-exchange --db-url=jdbc:postgresql://keycloak-db:5432/keycloak --db-username=keycloak --db-password=keycloak
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
-      KC_DB_USERNAME: keycloak
-      KC_DB_PASSWORD: keycloak
       KC_HOSTNAME: sso.app.danielr1996.de
       KC_HOSTNAME_STRICT: false
       KC_HTTP_ENABLED: true
@@ -21,7 +18,7 @@ services:
       traefik.http.routers.keycloak.tls.certresolver: letsencrypt
       de.danielr1996.bashdoard.name: Keycloak
       de.danielr1996.bashdoard.url: https://sso.app.danielr1996.de
-      de.danielr1996.bashdoard.icon: /resources/f5np5/welcome/keycloak/img/favicon.ico
+      de.danielr1996.bashdoard.icon: /resources/uv5nk/welcome/keycloak/img/favicon.ico
       de.danielr1996.bashdoard.id: keycloak
   keycloak-db:
     restart: unless-stopped
